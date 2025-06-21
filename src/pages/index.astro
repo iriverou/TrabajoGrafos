@@ -1,16 +1,127 @@
 ---
-
+import Layout from '../components/layout.astro';
+import WireworldGrid from '../components/wireworldgrid.astro';
+import Toolbar from '../components/toolbar.astro';
+import ControlPanel from '../components/controlpanel.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title> Wireworld - Automatas Celulares </title>
-	</head>
-	<body>
-		<h1>Wireworld - Simulador de Autómatas Celulares</h1>
-	</body>
-</html>
+<Layout title="Wireworld - Autómatas Celulares">
+    <h2>Simulador de Wireworld</h2>
+    <p>Explora los autómatas celulares con este simulador interactivo. Dibuja circuitos y observa cómo fluyen los electrones.</p>
+    
+    <!-- INSTRUCCIONES AL PRINCIPIO -->
+    <div class="instructions">
+        <h3>Cómo usar:</h3>
+        <ol>
+            <li><strong>Selecciona un estado</strong> en el panel izquierdo (Conductor, Cabeza, etc.)</li>
+            <li><strong>Haz clic en la cuadrícula negra</strong> para dibujar</li>
+            <li><strong>Presiona Play</strong> en el panel derecho para ver la simulación</li>
+            <li><strong>Experimenta</strong> con diferentes patrones</li>
+        </ol>
+    </div>
+
+    <!-- SIMULADOR CON TAMAÑO AJUSTADO -->
+    <div class="simulator-layout">
+        <!-- Panel izquierdo: Herramientas para dibujar -->
+        <div class="left-panel">
+            <Toolbar />
+        </div>
+        
+        <!-- Centro: La cuadrícula donde dibujas -->
+        <div class="center-panel">
+            <WireworldGrid />
+        </div>
+        
+        <!-- Panel derecho: Controles de simulación -->
+        <div class="right-panel">
+            <ControlPanel />
+        </div>
+    </div>
+</Layout>
+
+<style>
+    .instructions {
+        background-color: rgba(130, 188, 174, 0.1);
+        padding: 20px;
+        border-radius: 8px;
+        border-left: 4px solid #82BCAE;
+        margin: 20px 0 30px 0;
+    }
+    
+    .instructions ol {
+        margin: 10px 0 0 20px;
+    }
+    
+    .instructions li {
+        margin: 8px 0;
+        line-height: 1.5;
+    }
+
+    .simulator-layout {
+        display: grid;
+        grid-template-columns: minmax(160px, 200px) 1fr minmax(160px, 200px); /* Más pequeño */
+        gap: 8px; /* Gap más pequeño */
+        margin: 20px 0;
+        max-width: 100%;
+        overflow: hidden;
+    }
+    
+    .left-panel, .right-panel {
+        display: flex;
+        flex-direction: column;
+        min-width: 0; /* Permite que se compriman */
+    }
+    
+    .center-panel {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        overflow: hidden;
+        min-width: 0; /* Permite que se comprima */
+    }
+    
+    /* Responsive para pantallas medianas */
+    @media (max-width: 1200px) {
+        .simulator-layout {
+            grid-template-columns: 150px 1fr 150px; /* Aún más pequeño */
+            gap: 6px;
+        }
+    }
+    
+    /* Responsive para tablets */
+    @media (max-width: 900px) {
+        .simulator-layout {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+        }
+        
+        .center-panel {
+            grid-column: 1 / -1;
+            order: 1;
+        }
+        
+        .left-panel {
+            order: 2;
+        }
+        
+        .right-panel {
+            order: 3;
+        }
+    }
+    
+    /* Responsive para móviles */
+    @media (max-width: 600px) {
+        .simulator-layout {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .left-panel, .right-panel {
+            order: 2;
+        }
+        
+        .center-panel {
+            order: 1;
+        }
+    }
+</style>

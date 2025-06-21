@@ -1,0 +1,161 @@
+---
+export interface Props {
+    title: string;
+    description?: string;
+}
+
+const { title, description = "Simulador interactivo de Wireworld - Autómatas Celulares" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content={description} />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="/TrabajoGrafos/favicon.svg" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{title}</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #EDE6B8;
+                color: #52474D;
+                line-height: 1.6;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-content">
+                    <h1>Wireworld - Simulador de Autómatas Celulares</h1>
+                    <p>Exploración de Autómatas Celulares: Teoría, Aplicaciones y Desarrollo de un Modelo Interactivo</p>
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="navigation">
+                    <a href="/TrabajoGrafos/" class="nav-link">Inicio</a>
+                    <a href="/TrabajoGrafos/que-es-wireworld" class="nav-link">¿Qué es Wireworld?</a>
+                    <a href="/TrabajoGrafos/circuitos-demos" class="nav-link">circuitos-demos</a>
+                </nav>
+            </header>
+            
+            <!-- Main Content -->
+            <main>
+                <slot />
+            </main>
+            
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="footer-content">
+                    <p><strong>Trabajo Académico</strong> - Autómatas Celulares</p>
+                    <p>Universidad: Universidad Tecnologia Metropolitana - Julio 2025</p>
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>
+
+<style>
+    .header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 30px;
+        background: #82BCAE;
+        color: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(82, 71, 77, 0.2);
+    }
+    
+    .header-content {
+        margin-bottom: 20px;
+    }
+    
+    .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        text-shadow: 0 2px 4px rgba(82, 71, 77, 0.3);
+    }
+    
+    .header p {
+        font-size: 1.1em;
+        opacity: 0.9;
+    }
+    
+    .navigation {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .nav-link {
+        text-decoration: none;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        background-color: rgba(59, 141, 122, 0.3);
+        transition: all 0.3s;
+        font-weight: 500;
+        border: 2px solid transparent;
+    }
+    
+    .nav-link:hover {
+        background-color: #518a7d;
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(82, 71, 77, 0.2);
+    }
+    
+    main {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 8px rgba(82, 71, 77, 0.1);
+        min-height: 400px;
+        border: 1px solid rgba(130, 188, 174, 0.2);
+    }
+    
+    .footer {
+        text-align: center;
+        padding: 20px;
+        background-color: #82BCAE;
+        color: #ffffff;
+        border-radius: 12px;
+    }
+    
+    .footer-content p {
+        margin: 5px 0;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .header h1 {
+            font-size: 2em;
+        }
+        
+        .navigation {
+            gap: 10px;
+        }
+        
+        .nav-link {
+            padding: 8px 15px;
+            font-size: 0.9em;
+        }
+    }
+</style>

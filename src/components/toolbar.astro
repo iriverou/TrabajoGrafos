@@ -1,0 +1,239 @@
+---
+
+---
+
+<div class="toolbar">
+    <div class="tool-section">
+        <h4>Estados</h4>
+        <div class="state-buttons">
+            <button class="state-btn active" data-state="1">
+                <div class="state-preview conductor"></div>
+                <span>Conductor</span>
+            </button>
+            <button class="state-btn" data-state="2">
+                <div class="state-preview electron-head"></div>
+                <span>Cabeza</span>
+            </button>
+            <button class="state-btn" data-state="3">
+                <div class="state-preview electron-tail"></div>
+                <span>Cola</span>
+            </button>
+            <button class="state-btn" data-state="0">
+                <div class="state-preview empty"></div>
+                <span>Vacío</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="tool-section">
+        <h4>Herramientas</h4>
+        <div class="tool-buttons">
+            <button class="tool-btn active" data-tool="brush">
+                <span>✏️</span>
+                <span>Pincel</span>
+            </button>
+            <!-- Botón de borrador 
+            <button class="tool-btn" data-tool="pan">
+                <span>✋</span>
+                <span>Mover</span>
+            </button>
+            -->
+            </div>
+    </div>
+
+    <div class="tool-section">
+        <h4>Tamaño</h4>
+        <div class="brush-size">
+            <button class="size-btn active" data-size="1">1x1</button>
+            <button class="size-btn" data-size="3">3x3</button>
+            <button class="size-btn" data-size="5">5x5</button>
+        </div>
+    </div>
+
+    <div class="tool-section">
+        <h4>Acciones</h4>
+        <button class="action-btn clear-btn">
+            <span>🗑️</span>
+            <span>Limpiar</span>
+        </button>
+    </div>
+</div>
+
+<script>
+    // Declarar tipos globales
+    declare global {
+        interface Window {
+            wireworldApp: {
+                engine: any;
+                renderer: any;
+                interactionHandler: any;
+                generationCounter: HTMLElement;
+            };
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Botones de estado
+        const stateButtons = document.querySelectorAll('.state-btn');
+        stateButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                stateButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const htmlBtn = btn as HTMLElement;
+                const state = parseInt(htmlBtn.dataset.state || '1');
+                if ((window as any).wireworldApp) {
+                    (window as any).wireworldApp.interactionHandler.setState(state);
+                }
+            });
+        });
+
+        // Botones de herramientas
+        const toolButtons = document.querySelectorAll('.tool-btn');
+        toolButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                toolButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const htmlBtn = btn as HTMLElement;
+                const tool = htmlBtn.dataset.tool || 'brush';
+                if ((window as any).wireworldApp) {
+                    (window as any).wireworldApp.interactionHandler.setTool(tool);
+                }
+            });
+        });
+
+        // Botones de tamaño
+        const sizeButtons = document.querySelectorAll('.size-btn');
+        sizeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                sizeButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const htmlBtn = btn as HTMLElement;
+                const size = parseInt(htmlBtn.dataset.size || '1');
+                if ((window as any).wireworldApp) {
+                    (window as any).wireworldApp.interactionHandler.setBrushSize(size);
+                }
+            });
+        });
+
+        // Botón limpiar
+        const clearBtn = document.querySelector('.clear-btn');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                if ((window as any).wireworldApp) {
+                    (window as any).wireworldApp.interactionHandler.clearGrid();
+                }
+            });
+        }
+    });
+</script>
+
+<style>
+    .toolbar, .control-panel {
+        background: white;
+        border: 2px solid #82BCAE;
+        border-radius: 12px;
+        padding: 15px; /* Era 20px, ahora 15px */
+        display: flex;
+        flex-direction: column;
+        gap: 15px; /* Era 20px, ahora 15px */
+        min-width: 0; /* Importante: permite que se comprima */
+        box-shadow: 0 2px 4px rgba(82, 71, 77, 0.1);
+    }
+
+    .tool-section {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .tool-section h4 {
+        margin: 0;
+        color: #52474D;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        border-bottom: 1px solid #EDE6B8;
+        padding-bottom: 5px;
+    }
+
+    .state-buttons, .tool-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .state-btn, .tool-btn, .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border: 2px solid #EDE6B8;
+        background: white;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 0.85em;
+    }
+
+    .state-btn:hover, .tool-btn:hover, .action-btn:hover {
+        border-color: #82BCAE;
+        background-color: rgba(130, 188, 174, 0.1);
+    }
+
+    .state-btn.active, .tool-btn.active {
+        background-color: #82BCAE;
+        color: white;
+        border-color: #82BCAE;
+    }
+
+    .state-preview {
+        width: 16px;
+        height: 16px;
+        border: 1px solid #333;
+        border-radius: 2px;
+    }
+
+    .state-preview.empty { background-color: #000000; }
+    .state-preview.conductor { background-color: #FFD700; }
+    .state-preview.electron-head { background-color: #00FFFF; }
+    .state-preview.electron-tail { background-color: #FF00FF; }
+
+    .brush-size {
+        display: flex;
+        gap: 5px;
+    }
+
+    .size-btn {
+        flex: 1;
+        padding: 6px;
+        border: 2px solid #EDE6B8;
+        background: white;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.8em;
+        transition: all 0.3s;
+    }
+
+    .size-btn:hover {
+        border-color: #82BCAE;
+    }
+
+    .size-btn.active {
+        background-color: #82BCAE;
+        color: white;
+        border-color: #82BCAE;
+    }
+
+    .clear-btn {
+        background-color: #F26665;
+        color: white;
+        border-color: #F26665;
+    }
+
+    .clear-btn:hover {
+        background-color: #e55555;
+        border-color: #e55555;
+    }
+</style>

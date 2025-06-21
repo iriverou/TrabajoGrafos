@@ -1,0 +1,119 @@
+---
+
+---
+
+<div class="wireworld-container">
+    <canvas 
+        id="wireworld-canvas" 
+        class="wireworld-canvas"
+        width="700" 
+        height="500">
+        Tu navegador no soporta Canvas HTML5
+    </canvas>
+    
+    <div class="canvas-info">
+        <span id="generation-counter">Generación: 0</span>
+        <span id="mouse-coords">Posición: (0, 0)</span>
+    </div>
+</div>
+
+<script>
+    import { WireworldEngine } from '../scripts/wireworld-engine.js';
+    import { GridRenderer } from '../scripts/grid-render.js';
+    import { UserInteractionHandler } from '../scripts/user-interactions.js';
+
+    // Declarar tipos globales
+    declare global {
+        interface Window {
+            wireworldApp: {
+                engine: any;
+                renderer: any;
+                interactionHandler: any;
+                generationCounter: HTMLElement;
+            };
+        }
+    }
+
+    // Inicializar cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', () => {
+        const canvas = document.getElementById('wireworld-canvas') as HTMLCanvasElement;
+        const generationCounter = document.getElementById('generation-counter') as HTMLElement;
+        
+        // Verificar que los elementos existen
+        if (!canvas || !generationCounter) {
+            console.error('No se encontraron los elementos necesarios');
+            return;
+        }
+        
+        // Configuración inicial
+        const GRID_WIDTH = 70; 
+        const GRID_HEIGHT = 50;
+        const CELL_SIZE = 10;
+        
+        // Inicializar clases
+        const engine = new WireworldEngine(GRID_WIDTH, GRID_HEIGHT);
+        const renderer = new GridRenderer(canvas, CELL_SIZE);
+        const interactionHandler = new UserInteractionHandler(canvas, engine, renderer);
+        
+        // Renderizado inicial
+        renderer.render(engine);
+        
+        // Hacer disponibles globalmente para otros componentes
+        (window as any).wireworldApp = {
+            engine,
+            renderer,
+            interactionHandler,
+            generationCounter
+        };
+        
+        // Actualizar contador de mouse
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            const coords = renderer.getGridCoordinates(mouseX, mouseY);
+            
+            const mouseCoordsElement = document.getElementById('mouse-coords');
+            if (mouseCoordsElement) {
+                mouseCoordsElement.textContent = `Posición: (${coords.x}, ${coords.y})`;
+            }
+        });
+    });
+</script>
+
+<style>
+    .wireworld-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .wireworld-canvas {
+        border: 2px solid #82BCAE;
+        border-radius: 8px;
+        cursor: crosshair;
+        background-color: #000000;
+        max-width: 100%; /* AGREGAR ESTA LÍNEA */
+        height: auto;    /* AGREGAR ESTA LÍNEA */
+    }
+    
+    .wireworld-canvas:hover {
+        border-color: #F26665;
+    }
+    
+    .canvas-info {
+        display: flex;
+        gap: 20px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9em;
+        color: #52474D;
+    }
+    
+    .canvas-info span {
+        padding: 5px 10px;
+        background-color: rgba(130, 188, 174, 0.1);
+        border-radius: 4px;
+        border: 1px solid #82BCAE;
+    }
+</style>

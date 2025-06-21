@@ -1,0 +1,149 @@
+---
+import Layout from '../components/layout.astro';
+---
+
+<Layout title="¿Qué es Wireworld? - Autómatas Celulares">
+    <h2>¿Qué es Wireworld?</h2>
+    
+    <p><strong>Wireworld</strong> es un autómata celular propuesto por primera vez por <strong>Brian Silverman en 1987</strong>, como parte de su programa "Phantom Fish Tank". Posteriormente se hizo más conocido como resultado de un artículo en la columna "Computer Recreations" de la revista Scientific American.</p>
+    
+    <p>Wireworld es particularmente adecuado para <strong>simular transistores</strong> y es <strong>Turing-completo</strong>, lo que significa que puede simular cualquier computadora digital.</p>
+
+    <h3>Estados de las Celdas</h3>
+    <p>Una celda de Wireworld puede estar en uno de cuatro estados diferentes:</p>
+    
+    <div class="states-grid">
+        <div class="state-card">
+            <div class="state-color empty"></div>
+            <div class="state-info">
+                <h4>🔲 Espacio Vacío (Empty)</h4>
+                <p>Representado en <strong>negro</strong>. Las celdas vacías permanecen vacías.</p>
+            </div>
+        </div>
+        
+        <div class="state-card">
+            <div class="state-color conductor"></div>
+            <div class="state-info">
+                <h4>🟡 Conductor (Conductor)</h4>
+                <p>Representado en <strong>amarillo</strong>. Actúa como cable por donde fluyen los electrones.</p>
+            </div>
+        </div>
+        
+        <div class="state-card">
+            <div class="state-color electron-head"></div>
+            <div class="state-info">
+                <h4>🔵 Cabeza de Electrón (Electron Head)</h4>
+                <p>Representado en <strong>azul</strong>. Es la señal eléctrica activa moviéndose.</p>
+            </div>
+        </div>
+        
+        <div class="state-card">
+            <div class="state-color electron-tail"></div>
+            <div class="state-info">
+                <h4>🔴 Cola de Electrón (Electron Tail)</h4>
+                <p>Representado en <strong>rojo</strong>. Es el rastro que deja la cabeza del electrón.</p>
+            </div>
+        </div>
+    </div>
+
+    <h3>Reglas de Transición</h3>
+    <p>Como en todos los autómatas celulares, el tiempo avanza en pasos discretos llamados <strong>generaciones</strong>. Las celdas se comportan según estas reglas:</p>
+    
+    <div class="rules-container">
+        <ol>
+            <li><strong>Espacio vacío</strong> → permanece <strong>espacio vacío</strong></li>
+            <li><strong>Cabeza de electrón</strong> → se convierte en <strong>cola de electrón</strong></li>
+            <li><strong>Cola de electrón</strong> → se convierte en <strong>conductor</strong></li>
+            <li><strong>Conductor</strong> → se convierte en <strong>cabeza de electrón</strong> si exactamente una o dos celdas vecinas son cabezas de electrón, de lo contrario permanece como conductor</li>
+        </ol>
+    </div>
+
+    <h3>Vecindario de Moore</h3>
+    <p>Wireworld utiliza el llamado <strong>vecindario de Moore</strong>, lo que significa que las celdas "vecinas" son aquellas que están a una celda de distancia en cualquier dirección, tanto ortogonal como diagonal (8 vecinos en total).</p>
+
+    <h3>Aplicaciones</h3>
+    <p>Con estas reglas simples se pueden construir:</p>
+    <ul>
+        <li><strong>Compuertas lógicas</strong> (AND, OR, NOT, XOR)</li>
+        <li><strong>Generadores de clock</strong> (pulsos regulares)</li>
+        <li><strong>Diodos</strong> (permiten flujo en una dirección)</li>
+        <li><strong>Computadoras completas</strong> (como la "Wireworld Computer")</li>
+        <li><strong>Displays de 7 segmentos</strong> y decodificadores</li>
+    </ul>
+
+    <div class="historical-note">
+        <h4>📚 Relevancia Histórica</h4>
+        <p>Wireworld demostró que sistemas muy simples pueden exhibir comportamientos complejos y ser capaces de computación universal, siendo un ejemplo importante en el estudio de la <strong>teoría de la complejidad</strong> y los <strong>sistemas emergentes</strong>.</p>
+    </div>
+</Layout>
+
+<style>
+    .states-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+    }
+    
+    .state-card {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
+    }
+    
+    .state-color {
+        width: 40px;
+        height: 40px;
+        border-radius: 4px;
+        margin-right: 15px;
+        border: 2px solid #333;
+    }
+    
+    .state-color.empty { background-color: #000000; }
+    .state-color.conductor { background-color: #FFD700; }
+    .state-color.electron-head { background-color: #0066FF; }
+    .state-color.electron-tail { background-color: #FF3333; }
+    
+    .state-info h4 {
+        margin: 0 0 5px 0;
+        font-size: 1.1em;
+    }
+    
+    .state-info p {
+        margin: 0;
+        font-size: 0.9em;
+        color: #666;
+    }
+    
+    .rules-container {
+        background-color: #e8f4fd;
+        padding: 20px;
+        border-radius: 8px;
+        border-left: 4px solid #2196F3;
+        margin: 20px 0;
+    }
+    
+    .rules-container ol {
+        margin: 0;
+    }
+    
+    .rules-container li {
+        margin-bottom: 8px;
+    }
+    
+    .historical-note {
+        background-color: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 30px;
+    }
+    
+    .historical-note h4 {
+        margin-top: 0;
+        color: #856404;
+    }
+</style>

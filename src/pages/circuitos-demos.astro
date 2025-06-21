@@ -1,0 +1,117 @@
+---
+import Layout from '../components/layout.astro';
+---
+
+<Layout title="Circuitos y Demos - Wireworld">
+    <h2>Circuitos y Componentes de Wireworld</h2>
+    
+    <p>Esta sección contiene una colección de circuitos y componentes básicos que pueden construirse en Wireworld, desde elementos simples hasta sistemas más complejos.</p>
+
+    <div class="circuits-container">
+        <h3>Componentes Básicos</h3>
+        
+        <div class="circuit-card">
+            <h4>Diodo</h4>
+            <p>Permite el flujo de electrones en una sola dirección. Es el componente más simple de Wireworld.</p>
+        </div>
+
+        <div class="circuit-card">
+            <h4>Generador de Clock</h4>
+            <p>Produce pulsos regulares de electrones. Fundamental para sincronizar circuitos digitales.</p>
+        </div>
+
+        <div class="circuit-card">
+            <h4>Compuerta AND</h4>
+            <p>Produce salida solo cuando ambas entradas están activas simultaneamente.</p>
+        </div>
+
+        <div class="circuit-card">
+            <h4>Compuerta OR</h4>
+            <p>Produce salida cuando al menos una de las entradas está activa.</p>
+        </div>
+
+        <div class="circuit-card">
+            <h4>Compuerta NOT</h4>
+            <p>Invierte la señal de entrada. Esencial para lógica digital completa.</p>
+        </div>
+
+        <div class="circuit-card">
+            <h4>Compuerta XOR</h4>
+            <p>Produce salida cuando exactamente una entrada está activa.</p>
+        </div>
+    </div>
+
+    <div class="advanced-section">
+        <h3>Circuitos Avanzados</h3>
+        
+        <div class="circuit-card">
+            <h4>Display de 7 Segmentos</h4>
+            <p>Sistema completo para mostrar dígitos usando segmentos controlados individualmente.</p>
+        </div>
+
+        <div class="circuit-card">
+            <h4>Contador Binario</h4>
+            <p>Circuito secuencial que cuenta pulsos de clock en formato binario.</p>
+        </div>
+
+        <div class="circuit-card">
+            <h4>Flip-Flop</h4>
+            <p>Elemento de memoria básico que puede almacenar un bit de información.</p>
+        </div>
+    </div>
+
+    <div class="demo-note">
+        <h4>Próximamente</h4>
+        <p>Los simuladores interactivos para cada circuito estarán disponibles en la siguiente fase del proyecto.</p>
+    </div>
+</Layout>
+
+<style>
+    .circuits-container {
+        margin: 30px 0;
+    }
+
+    .circuit-card {
+        background-color: #f8f9fa;
+        padding: 20px;
+        margin: 15px 0;
+        border-radius: 8px;
+        border-left: 4px solid #2196F3;
+    }
+
+    .circuit-card h4 {
+        margin: 0 0 10px 0;
+        color: #333;
+    }
+
+    .circuit-card p {
+        margin: 0;
+        color: #666;
+        line-height: 1.5;
+    }
+
+    .advanced-section {
+        margin: 40px 0;
+        padding: 20px;
+        background-color: #fff3cd;
+        border-radius: 8px;
+        border: 1px solid #ffeaa7;
+    }
+
+    .advanced-section h3 {
+        margin-top: 0;
+        color: #856404;
+    }
+
+    .demo-note {
+        background-color: #e8f4fd;
+        padding: 20px;
+        border-radius: 8px;
+        border-left: 4px solid #2196F3;
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    .demo-note h4 {
+        margin: 0 0 10px 0;
+        color: #1976D2;

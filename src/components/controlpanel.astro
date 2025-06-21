@@ -1,0 +1,291 @@
+---
+
+---
+
+<div class="control-panel">
+    <div class="control-section">
+        <h4>Simulación</h4>
+        <div class="control-buttons">
+            <button class="ctrl-btn play-btn" id="play-pause-btn">
+                <span id="play-icon">▶️</span>
+                <span>Play</span>
+            </button>
+            <button class="ctrl-btn step-btn">
+                <span>⏭️</span>
+                <span>Paso</span>
+            </button>
+            <button class="ctrl-btn reset-btn">
+                <span>🔄</span>
+                <span>Reset</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="control-section">
+        <h4>Velocidad</h4>
+        <div class="speed-control">
+            <input type="range" id="speed-slider" min="1" max="10" value="5" class="speed-slider">
+            <div class="speed-labels">
+                <span>Lento</span>
+                <span id="speed-value">5x</span>
+                <span>Rápido</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="control-section">
+        <h4>Información</h4>
+        <div class="info-display">
+            <div class="info-item">
+                <span>Generación:</span>
+                <span id="gen-display">0</span>
+            </div>
+            <div class="info-item">
+                <span>Estado:</span>
+                <span id="status-display">Detenido</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Declarar tipos globales
+    declare global {
+        interface Window {
+            wireworldApp: {
+                engine: any;
+                renderer: any;
+                interactionHandler: any;
+                generationCounter: HTMLElement;
+            };
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        let isRunning = false;
+        let animationInterval: number | null = null;
+        let speed = 5; // velocidad por defecto
+
+        const playPauseBtn = document.getElementById('play-pause-btn') as HTMLButtonElement;
+        const playIcon = document.getElementById('play-icon') as HTMLElement;
+        const stepBtn = document.querySelector('.step-btn') as HTMLButtonElement;
+        const resetBtn = document.querySelector('.reset-btn') as HTMLButtonElement;
+        const speedSlider = document.getElementById('speed-slider') as HTMLInputElement;
+        const speedValue = document.getElementById('speed-value') as HTMLElement;
+        const genDisplay = document.getElementById('gen-display') as HTMLElement;
+        const statusDisplay = document.getElementById('status-display') as HTMLElement;
+
+        // Verificar que todos los elementos existen
+        if (!playPauseBtn || !playIcon || !stepBtn || !resetBtn || 
+            !speedSlider || !speedValue || !genDisplay || !statusDisplay) {
+            console.error('No se encontraron todos los elementos necesarios del panel de control');
+            return;
+        }
+
+        // Play/Pause
+        playPauseBtn.addEventListener('click', () => {
+            if (isRunning) {
+                stopSimulation();
+            } else {
+                startSimulation();
+            }
+        });
+
+        // Step
+        stepBtn.addEventListener('click', () => {
+            if ((window as any).wireworldApp && !isRunning) {
+                (window as any).wireworldApp.engine.step();
+                (window as any).wireworldApp.renderer.render((window as any).wireworldApp.engine);
+                updateDisplay();
+            }
+        });
+
+        // Reset
+        resetBtn.addEventListener('click', () => {
+            stopSimulation();
+            if ((window as any).wireworldApp) {
+                (window as any).wireworldApp.engine.clear();
+                (window as any).wireworldApp.renderer.render((window as any).wireworldApp.engine);
+                updateDisplay();
+            }
+        });
+
+        // Speed slider
+        speedSlider.addEventListener('input', (e) => {
+            const target = e.target as HTMLInputElement;
+            speed = parseInt(target.value);
+            speedValue.textContent = `${speed}x`;
+            
+            if (isRunning) {
+                stopSimulation();
+                startSimulation();
+            }
+        });
+
+        function startSimulation() {
+            if (!(window as any).wireworldApp) return;
+            
+            isRunning = true;
+            playIcon.textContent = '⏸️';
+            const playText = playPauseBtn.querySelector('span:last-child');
+            if (playText) playText.textContent = 'Pause';
+            statusDisplay.textContent = 'Ejecutando';
+            
+            const interval = Math.max(50, 1000 / speed);
+            animationInterval = window.setInterval(() => {
+                (window as any).wireworldApp.engine.step();
+                (window as any).wireworldApp.renderer.render((window as any).wireworldApp.engine);
+                updateDisplay();
+            }, interval);
+        }
+
+        function stopSimulation() {
+            isRunning = false;
+            playIcon.textContent = '▶️';
+            const playText = playPauseBtn.querySelector('span:last-child');
+            if (playText) playText.textContent = 'Play';
+            statusDisplay.textContent = 'Detenido';
+            
+            if (animationInterval !== null) {
+                window.clearInterval(animationInterval);
+                animationInterval = null;
+            }
+        }
+
+        function updateDisplay() {
+            if ((window as any).wireworldApp) {
+                genDisplay.textContent = (window as any).wireworldApp.engine.generation.toString();
+                (window as any).wireworldApp.generationCounter.textContent = 
+                    `Generación: ${(window as any).wireworldApp.engine.generation}`;
+            }
+        }
+    });
+</script>
+
+<style>
+    .toolbar, .control-panel {
+        background: white;
+        border: 2px solid #82BCAE;
+        border-radius: 12px;
+        padding: 15px; /* Era 20px, ahora 15px */
+        display: flex;
+        flex-direction: column;
+        gap: 15px; /* Era 20px, ahora 15px */
+        min-width: 0; /* Importante: permite que se comprima */
+        box-shadow: 0 2px 4px rgba(82, 71, 77, 0.1);
+    }
+
+    .control-section {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .control-section h4 {
+        margin: 0;
+        color: #52474D;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        border-bottom: 1px solid #EDE6B8;
+        padding-bottom: 5px;
+    }
+
+    .control-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .ctrl-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border: 2px solid #EDE6B8;
+        background: white;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 0.85em;
+    }
+
+    .ctrl-btn:hover {
+        border-color: #82BCAE;
+        background-color: rgba(130, 188, 174, 0.1);
+    }
+
+    .play-btn {
+        background-color: #82BCAE;
+        color: white;
+        border-color: #82BCAE;
+    }
+
+    .play-btn:hover {
+        background-color: #6fa89b;
+    }
+
+    .reset-btn {
+        background-color: #F26665;
+        color: white;
+        border-color: #F26665;
+    }
+
+    .reset-btn:hover {     
+        background-color: #e55555;
+    }
+
+    .speed-control {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .speed-slider {
+        width: 100%;
+        height: 6px;
+        border-radius: 3px;
+        background: #EDE6B8;
+        outline: none;
+        cursor: pointer;
+    }
+
+    .speed-slider::-webkit-slider-thumb {
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #82BCAE;
+        cursor: pointer;
+    }
+
+    .speed-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.75em;
+        color: #52474D;
+    }
+
+    .info-display {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 10px;
+        background-color: rgba(130, 188, 174, 0.1);
+        border-radius: 4px;
+        font-size: 0.85em;
+    }
+
+    .info-item span:first-child {
+        color: #52474D;
+    }
+
+    .info-item span:last-child {
+        font-weight: bold;
+        color: #82BCAE;
+    }
+</style>
