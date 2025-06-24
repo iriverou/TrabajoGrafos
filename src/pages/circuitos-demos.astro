@@ -4,12 +4,21 @@ import CircuitDemo from '../components/circuitdemo.astro';
 import { CIRCUIT_PATTERNS, CIRCUIT_INFO } from '../scripts/circuit-patterns.js';
 ---
 
-<Layout title="Circuitos y Demos - Wireworld">
-    <h2>Circuitos y Componentes de Wireworld</h2>
+<Layout title="Circuitos Básicos - Wireworld">
+    <h2>Circuitos Básicos de Wireworld</h2>
     
-    <p>Esta sección contiene simuladores interactivos de circuitos y componentes básicos que pueden construirse en Wireworld. Cada demo incluye controles para iniciar, pausar y reiniciar la simulación.</p>
+    <p>Esta sección contiene simuladores interactivos de circuitos y componentes básicos de Wireworld, diseñados para facilitar el aprendizaje progresivo. Comenzamos con los patrones más simples para entender los principios fundamentales.</p>
 
     <div class="instructions">
+        <h3>Cómo usar las demos:</h3>
+        <ol>
+            <li><strong>Haz clic en "Iniciar"</strong> para comenzar la simulación</li>
+            <li><strong>Observa</strong> cómo fluyen los electrones por los circuitos básicos</li>
+            <li><strong>Usa "Reiniciar"</strong> para volver al estado inicial</li>
+            <li><strong>Experimenta</strong> pausando y reanudando las simulaciones</li>
+            <li><strong>Aprende progresivamente</strong> desde los patrones más simples hasta los más complejos</li>
+        </ol>
+    </div>
         <h3>Cómo usar las demos:</h3>
         <ol>
             <li><strong>Haz clic en "Iniciar"</strong> para comenzar la simulación</li>
@@ -20,94 +29,79 @@ import { CIRCUIT_PATTERNS, CIRCUIT_INFO } from '../scripts/circuit-patterns.js';
     </div>
 
     <div class="circuits-container">
-        <h3>Componentes Básicos</h3>
+        <h3>Fundamentos Básicos</h3>
         
         <CircuitDemo 
-            title={CIRCUIT_INFO.ELECTRON_WIRE.title}
-            description={CIRCUIT_INFO.ELECTRON_WIRE.description}
-            pattern={CIRCUIT_PATTERNS.ELECTRON_WIRE}
-            width={480}
+            title={CIRCUIT_INFO.SIMPLE_WIRE.title}
+            description={CIRCUIT_INFO.SIMPLE_WIRE.description}
+            pattern={CIRCUIT_PATTERNS.SIMPLE_WIRE}
+            width={192}
             height={120}
         />
 
         <CircuitDemo 
-            title={CIRCUIT_INFO.DIODE.title}
-            description={CIRCUIT_INFO.DIODE.description}
-            pattern={CIRCUIT_PATTERNS.DIODE}
-            width={352}
-            height={160}
+            title={CIRCUIT_INFO.LINE_SWITCH.title}
+            description={CIRCUIT_INFO.LINE_SWITCH.description}
+            pattern={CIRCUIT_PATTERNS.LINE_SWITCH}
+            width={160}
+            height={120}
         />
 
         <CircuitDemo 
-            title={CIRCUIT_INFO.CLOCK_GENERATOR.title}
-            description={CIRCUIT_INFO.CLOCK_GENERATOR.description}
-            pattern={CIRCUIT_PATTERNS.CLOCK_GENERATOR}
-            width={480}
-            height={308}
+            title={CIRCUIT_INFO.BUFFER_SIMPLE.title}
+            description={CIRCUIT_INFO.BUFFER_SIMPLE.description}
+            pattern={CIRCUIT_PATTERNS.BUFFER_SIMPLE}
+            width={128}
+            height={128}
         />
     </div>
 
     <div class="logic-gates-section">
-        <h3>Compuertas Lógicas</h3>
-        
+        <h3>Elementos de Control</h3>
+
         <CircuitDemo 
-            title={CIRCUIT_INFO.AND_GATE.title}
-            description={CIRCUIT_INFO.AND_GATE.description}
-            pattern={CIRCUIT_PATTERNS.AND_GATE}
-            width={480}
-            height={256}
+            title={CIRCUIT_INFO.SIMPLE_JUNCTION.title}
+            description={CIRCUIT_INFO.SIMPLE_JUNCTION.description}
+            pattern={CIRCUIT_PATTERNS.SIMPLE_JUNCTION}
+            width={160}
+            height={160}
         />
 
         <CircuitDemo 
-            title={CIRCUIT_INFO.OR_GATE.title}
-            description={CIRCUIT_INFO.OR_GATE.description}
-            pattern={CIRCUIT_PATTERNS.OR_GATE}
-            width={480}
-            height={256}
-        />
-
-        <CircuitDemo 
-            title={CIRCUIT_INFO.NOT_GATE.title}
-            description={CIRCUIT_INFO.NOT_GATE.description}
-            pattern={CIRCUIT_PATTERNS.NOT_GATE}
-            width={416}
-            height={192}
-        />
-
-        <CircuitDemo 
-            title={CIRCUIT_INFO.XOR_GATE.title}
-            description={CIRCUIT_INFO.XOR_GATE.description}
-            pattern={CIRCUIT_PATTERNS.XOR_GATE}
-            width={608}
-            height={256}
+            title={CIRCUIT_INFO.WIRE_WITH_OSCILLATOR.title}
+            description={CIRCUIT_INFO.WIRE_WITH_OSCILLATOR.description}
+            pattern={CIRCUIT_PATTERNS.WIRE_WITH_OSCILLATOR}
+            width={160}
+            height={160}
         />
     </div>
 
     <div class="advanced-section">
-        <h3>Circuitos Avanzados</h3>
-        
+        <h3>Compuertas Lógicas Básicas</h3>
+
         <CircuitDemo 
-            title={CIRCUIT_INFO.CROSSOVER.title}
-            description={CIRCUIT_INFO.CROSSOVER.description}
-            pattern={CIRCUIT_PATTERNS.CROSSOVER}
-            width={288}
-            height={224}
+            title={CIRCUIT_INFO.NOT_GATE_SIMPLE.title}
+            description={CIRCUIT_INFO.NOT_GATE_SIMPLE.description}
+            pattern={CIRCUIT_PATTERNS.NOT_GATE_SIMPLE}
+            width={160}
+            height={160}
         />
 
         <CircuitDemo 
-            title={CIRCUIT_INFO.FLIP_FLOP.title}
-            description={CIRCUIT_INFO.FLIP_FLOP.description}
-            pattern={CIRCUIT_PATTERNS.FLIP_FLOP}
-            width={544}
-            height={352}
+            title={CIRCUIT_INFO.AND_GATE_SIMPLE.title}
+            description={CIRCUIT_INFO.AND_GATE_SIMPLE.description}
+            pattern={CIRCUIT_PATTERNS.AND_GATE_SIMPLE}
+            width={160}
+            height={128}
         />
 
         <CircuitDemo 
-            title={CIRCUIT_INFO.BUFFER.title}
-            description={CIRCUIT_INFO.BUFFER.description}
-            pattern={CIRCUIT_PATTERNS.BUFFER}
-            width={352}
-            height={120}
+            title={CIRCUIT_INFO.OR_GATE_SIMPLE.title}
+            description={CIRCUIT_INFO.OR_GATE_SIMPLE.description}
+            pattern={CIRCUIT_PATTERNS.OR_GATE_SIMPLE}
+            width={160}
+            height={128}
+        />
         />
     </div>
 
