@@ -32,13 +32,7 @@
                 <span>✏️</span>
                 <span>Pincel</span>
             </button>
-            <!-- Botón de borrador 
-            <button class="tool-btn" data-tool="pan">
-                <span>✋</span>
-                <span>Mover</span>
-            </button>
-            -->
-            </div>
+        </div>
     </div>
 
     <div class="tool-section">
@@ -60,30 +54,36 @@
 </div>
 
 <script>
-    // Declarar tipos globales
-    declare global {
-        interface Window {
-            wireworldApp: {
-                engine: any;
-                renderer: any;
-                interactionHandler: any;
-                generationCounter: HTMLElement;
-            };
-        }
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
+        // Función auxiliar para verificar si la app está disponible
+        function getWireworldApp() {
+            if (window.wireworldApp) {
+                return window.wireworldApp;
+            }
+            console.warn('WireworldApp no está disponible aún');
+            return null;
+        }
+
         // Botones de estado
         const stateButtons = document.querySelectorAll('.state-btn');
         stateButtons.forEach(btn => {
             btn.addEventListener('click', () => {
-                stateButtons.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                const htmlBtn = btn as HTMLElement;
-                const state = parseInt(htmlBtn.dataset.state || '1');
-                if ((window as any).wireworldApp) {
-                    (window as any).wireworldApp.interactionHandler.setState(state);
+                try {
+                    stateButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    const htmlBtn = btn as HTMLElement;
+                    const state = parseInt(htmlBtn.dataset.state || '1');
+                    const app = getWireworldApp();
+                    
+                    if (app && app.interactionHandler) {
+                        const success = app.interactionHandler.setState(state);
+                        if (!success) {
+                            console.error('No se pudo establecer el estado');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error al cambiar estado:', error);
                 }
             });
         });
@@ -92,13 +92,19 @@
         const toolButtons = document.querySelectorAll('.tool-btn');
         toolButtons.forEach(btn => {
             btn.addEventListener('click', () => {
-                toolButtons.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                const htmlBtn = btn as HTMLElement;
-                const tool = htmlBtn.dataset.tool || 'brush';
-                if ((window as any).wireworldApp) {
-                    (window as any).wireworldApp.interactionHandler.setTool(tool);
+                try {
+                    toolButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    const htmlBtn = btn as HTMLElement;
+                    const tool = htmlBtn.dataset.tool || 'brush';
+                    const app = getWireworldApp();
+                    
+                    if (app && app.interactionHandler) {
+                        app.interactionHandler.setTool(tool);
+                    }
+                } catch (error) {
+                    console.error('Error al cambiar herramienta:', error);
                 }
             });
         });
@@ -107,13 +113,22 @@
         const sizeButtons = document.querySelectorAll('.size-btn');
         sizeButtons.forEach(btn => {
             btn.addEventListener('click', () => {
-                sizeButtons.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                const htmlBtn = btn as HTMLElement;
-                const size = parseInt(htmlBtn.dataset.size || '1');
-                if ((window as any).wireworldApp) {
-                    (window as any).wireworldApp.interactionHandler.setBrushSize(size);
+                try {
+                    sizeButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    const htmlBtn = btn as HTMLElement;
+                    const size = parseInt(htmlBtn.dataset.size || '1');
+                    const app = getWireworldApp();
+                    
+                    if (app && app.interactionHandler) {
+                        const success = app.interactionHandler.setBrushSize(size);
+                        if (!success) {
+                            console.error('No se pudo establecer el tamaño del pincel');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error al cambiar tamaño del pincel:', error);
                 }
             });
         });
@@ -122,8 +137,13 @@
         const clearBtn = document.querySelector('.clear-btn');
         if (clearBtn) {
             clearBtn.addEventListener('click', () => {
-                if ((window as any).wireworldApp) {
-                    (window as any).wireworldApp.interactionHandler.clearGrid();
+                try {
+                    const app = getWireworldApp();
+                    if (app && app.interactionHandler) {
+                        app.interactionHandler.clearGrid();
+                    }
+                } catch (error) {
+                    console.error('Error al limpiar la cuadrícula:', error);
                 }
             });
         }

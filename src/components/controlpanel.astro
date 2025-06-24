@@ -49,15 +49,10 @@
 </div>
 
 <script>
-    // Declarar tipos globales
+    // Declarar el tipo global
     declare global {
         interface Window {
-            wireworldApp: {
-                engine: any;
-                renderer: any;
-                interactionHandler: any;
-                generationCounter: HTMLElement;
-            };
+            wireworldApp: any;
         }
     }
 
@@ -66,14 +61,23 @@
         let animationInterval: number | null = null;
         let speed = 5; // velocidad por defecto
 
-        const playPauseBtn = document.getElementById('play-pause-btn') as HTMLButtonElement;
-        const playIcon = document.getElementById('play-icon') as HTMLElement;
-        const stepBtn = document.querySelector('.step-btn') as HTMLButtonElement;
-        const resetBtn = document.querySelector('.reset-btn') as HTMLButtonElement;
-        const speedSlider = document.getElementById('speed-slider') as HTMLInputElement;
-        const speedValue = document.getElementById('speed-value') as HTMLElement;
-        const genDisplay = document.getElementById('gen-display') as HTMLElement;
-        const statusDisplay = document.getElementById('status-display') as HTMLElement;
+        // Función auxiliar para verificar si la app está disponible
+        function getWireworldApp() {
+            if (window.wireworldApp) {
+                return window.wireworldApp;
+            }
+            console.warn('WireworldApp no está disponible aún');
+            return null;
+        }
+
+        const playPauseBtn = document.getElementById('play-pause-btn') as HTMLButtonElement | null;
+        const playIcon = document.getElementById('play-icon') as HTMLElement | null;
+        const stepBtn = document.querySelector('.step-btn') as HTMLButtonElement | null;
+        const resetBtn = document.querySelector('.reset-btn') as HTMLButtonElement | null;
+        const speedSlider = document.getElementById('speed-slider') as HTMLInputElement | null;
+        const speedValue = document.getElementById('speed-value') as HTMLElement | null;
+        const genDisplay = document.getElementById('gen-display') as HTMLElement | null;
+        const statusDisplay = document.getElementById('status-display') as HTMLElement | null;
 
         // Verificar que todos los elementos existen
         if (!playPauseBtn || !playIcon || !stepBtn || !resetBtn || 
@@ -84,79 +88,128 @@
 
         // Play/Pause
         playPauseBtn.addEventListener('click', () => {
-            if (isRunning) {
-                stopSimulation();
-            } else {
-                startSimulation();
+            try {
+                if (isRunning) {
+                    stopSimulation();
+                } else {
+                    startSimulation();
+                }
+            } catch (error) {
+                console.error('Error al cambiar estado de simulación:', error);
             }
         });
 
         // Step
         stepBtn.addEventListener('click', () => {
-            if ((window as any).wireworldApp && !isRunning) {
-                (window as any).wireworldApp.engine.step();
-                (window as any).wireworldApp.renderer.render((window as any).wireworldApp.engine);
-                updateDisplay();
+            try {
+                const app = getWireworldApp();
+                if (app && app.engine && !isRunning) {
+                    app.engine.step();
+                    app.renderer.render(app.engine);
+                    updateDisplay();
+                }
+            } catch (error) {
+                console.error('Error al ejecutar paso:', error);
             }
         });
 
         // Reset
         resetBtn.addEventListener('click', () => {
-            stopSimulation();
-            if ((window as any).wireworldApp) {
-                (window as any).wireworldApp.engine.clear();
-                (window as any).wireworldApp.renderer.render((window as any).wireworldApp.engine);
-                updateDisplay();
+            try {
+                stopSimulation();
+                const app = getWireworldApp();
+                if (app && app.engine && app.renderer) {
+                    app.engine.clear();
+                    app.renderer.render(app.engine);
+                    updateDisplay();
+                }
+            } catch (error) {
+                console.error('Error al resetear simulación:', error);
             }
         });
 
         // Speed slider
         speedSlider.addEventListener('input', (e) => {
-            const target = e.target as HTMLInputElement;
-            speed = parseInt(target.value);
-            speedValue.textContent = `${speed}x`;
-            
-            if (isRunning) {
-                stopSimulation();
-                startSimulation();
+            try {
+                const target = e.target as HTMLInputElement;
+                if (target) {
+                    speed = parseInt(target.value);
+                    if (speedValue) {
+                        speedValue.textContent = `${speed}x`;
+                    }
+                    
+                    if (isRunning) {
+                        stopSimulation();
+                        startSimulation();
+                    }
+                }
+            } catch (error) {
+                console.error('Error al cambiar velocidad:', error);
             }
         });
 
         function startSimulation() {
-            if (!(window as any).wireworldApp) return;
+            const app = getWireworldApp();
+            if (!app || !app.engine || !app.renderer) {
+                console.error('No se puede iniciar la simulación: app no disponible');
+                return;
+            }
             
-            isRunning = true;
-            playIcon.textContent = '⏸️';
-            const playText = playPauseBtn.querySelector('span:last-child');
-            if (playText) playText.textContent = 'Pause';
-            statusDisplay.textContent = 'Ejecutando';
-            
-            const interval = Math.max(50, 1000 / speed);
-            animationInterval = window.setInterval(() => {
-                (window as any).wireworldApp.engine.step();
-                (window as any).wireworldApp.renderer.render((window as any).wireworldApp.engine);
-                updateDisplay();
-            }, interval);
+            try {
+                isRunning = true;
+                if (playIcon) playIcon.textContent = '⏸️';
+                if (playPauseBtn) {
+                    const playText = playPauseBtn.querySelector('span:last-child');
+                    if (playText) playText.textContent = 'Pause';
+                }
+                if (statusDisplay) statusDisplay.textContent = 'Ejecutando';
+                
+                const interval = Math.max(50, 1000 / speed);
+                animationInterval = window.setInterval(() => {
+                    try {
+                        app.engine.step();
+                        app.renderer.render(app.engine);
+                        updateDisplay();
+                    } catch (error) {
+                        console.error('Error durante la simulación:', error);
+                        stopSimulation();
+                    }
+                }, interval);
+            } catch (error) {
+                console.error('Error al iniciar simulación:', error);
+                stopSimulation();
+            }
         }
 
         function stopSimulation() {
-            isRunning = false;
-            playIcon.textContent = '▶️';
-            const playText = playPauseBtn.querySelector('span:last-child');
-            if (playText) playText.textContent = 'Play';
-            statusDisplay.textContent = 'Detenido';
-            
-            if (animationInterval !== null) {
-                window.clearInterval(animationInterval);
-                animationInterval = null;
+            try {
+                isRunning = false;
+                if (playIcon) playIcon.textContent = '▶️';
+                if (playPauseBtn) {
+                    const playText = playPauseBtn.querySelector('span:last-child');
+                    if (playText) playText.textContent = 'Play';
+                }
+                if (statusDisplay) statusDisplay.textContent = 'Detenido';
+                
+                if (animationInterval !== null) {
+                    window.clearInterval(animationInterval);
+                    animationInterval = null;
+                }
+            } catch (error) {
+                console.error('Error al detener simulación:', error);
             }
         }
 
         function updateDisplay() {
-            if ((window as any).wireworldApp) {
-                genDisplay.textContent = (window as any).wireworldApp.engine.generation.toString();
-                (window as any).wireworldApp.generationCounter.textContent = 
-                    `Generación: ${(window as any).wireworldApp.engine.generation}`;
+            try {
+                const app = getWireworldApp();
+                if (app && app.engine && app.generationCounter && genDisplay) {
+                    const generation = app.engine.generation;
+                    genDisplay.textContent = generation.toString();
+                    app.generationCounter.textContent = `Generación: ${generation}`;
+                }
+            } catch (error) {
+                console.error('Error al actualizar display:', error);
             }
         }
     });

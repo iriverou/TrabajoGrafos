@@ -1,0 +1,410 @@
+---
+interface Props {
+    title: string;
+    description: string;
+    pattern: number[][];
+    width?: number;
+    height?: number;
+}
+
+const { title, description, pattern, width = 400, height = 300 } = Astro.props;
+const canvasId = `demo-canvas-${title.toLowerCase().replace(/\s+/g, '-')}`;
+---
+
+<div class="demo-container">
+    <div class="demo-header">
+        <h4>{title}</h4>
+        <p>{description}</p>
+    </div>
+    
+    <div class="demo-canvas-container">
+        <canvas 
+            id={canvasId}
+            class="demo-canvas"
+            width={width} 
+            height={height}>
+            Tu navegador no soporta Canvas HTML5
+        </canvas>
+        
+        <div class="demo-controls">
+            <button class="demo-btn start-btn" data-canvas={canvasId}>
+                <span>▶️</span>
+                <span>Iniciar</span>
+            </button>
+            <button class="demo-btn reset-btn" data-canvas={canvasId}>
+                <span>🔄</span>
+                <span>Reiniciar</span>
+            </button>
+        </div>
+    </div>
+    
+    <div class="demo-info">
+        <span class="demo-generation">Generación: 0</span>
+        <span class="demo-status">Estado: Detenido</span>
+    </div>
+</div>
+
+<script define:vars={{ pattern, canvasId }}>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Definir las clases directamente aquí para evitar problemas de importación
+        const STATES = {
+            EMPTY: 0,
+            CONDUCTOR: 1,
+            ELECTRON_HEAD: 2,
+            ELECTRON_TAIL: 3
+        };
+
+        class WireworldEngine {
+            constructor(width, height) {
+                this.width = width;
+                this.height = height;
+                this.grid = this.createEmptyGrid();
+                this.generation = 0;
+            }
+
+            createEmptyGrid() {
+                return Array(this.height).fill().map(() => Array(this.width).fill(STATES.EMPTY));
+            }
+
+            step() {
+                const newGrid = this.createEmptyGrid();
+                
+                for (let y = 0; y < this.height; y++) {
+                    for (let x = 0; x < this.width; x++) {
+                        newGrid[y][x] = this.getNextState(x, y);
+                    }
+                }
+                
+                this.grid = newGrid;
+                this.generation++;
+            }
+
+            getNextState(x, y) {
+                const currentState = this.grid[y][x];
+                
+                switch(currentState) {
+                    case STATES.EMPTY:
+                        return STATES.EMPTY;
+                    case STATES.ELECTRON_HEAD:
+                        return STATES.ELECTRON_TAIL;
+                    case STATES.ELECTRON_TAIL:
+                        return STATES.CONDUCTOR;
+                    case STATES.CONDUCTOR:
+                        const electronHeadNeighbors = this.countElectronHeadNeighbors(x, y);
+                        return (electronHeadNeighbors === 1 || electronHeadNeighbors === 2) 
+                            ? STATES.ELECTRON_HEAD 
+                            : STATES.CONDUCTOR;
+                    default:
+                        return STATES.EMPTY;
+                }
+            }
+
+            countElectronHeadNeighbors(x, y) {
+                let count = 0;
+                
+                for (let dy = -1; dy <= 1; dy++) {
+                    for (let dx = -1; dx <= 1; dx++) {
+                        if (dx === 0 && dy === 0) continue;
+                        
+                        const nx = x + dx;
+                        const ny = y + dy;
+                        
+                        if (nx >= 0 && nx < this.width && ny >= 0 && ny < this.height) {
+                            if (this.grid[ny][nx] === STATES.ELECTRON_HEAD) {
+                                count++;
+                            }
+                        }
+                    }
+                }
+                
+                return count;
+            }
+
+            setCell(x, y, state) {
+                if (x >= 0 && x < this.width && y >= 0 && y < this.height) {
+                    this.grid[y][x] = state;
+                    return true;
+                }
+                return false;
+            }
+
+            getCell(x, y) {
+                if (x >= 0 && x < this.width && y >= 0 && y < this.height) {
+                    return this.grid[y][x];
+                }
+                return STATES.EMPTY;
+            }
+
+            clear() {
+                this.grid = this.createEmptyGrid();
+                this.generation = 0;
+            }
+        }
+
+        class GridRenderer {
+            constructor(canvas, cellSize = 10) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.cellSize = cellSize;
+                this.colors = {
+                    [STATES.EMPTY]: '#000000',
+                    [STATES.CONDUCTOR]: '#FFD700',
+                    [STATES.ELECTRON_HEAD]: '#00FFFF',
+                    [STATES.ELECTRON_TAIL]: '#FF00FF'
+                };
+            }
+
+            render(engine) {
+                try {
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    
+                    for (let y = 0; y < engine.height; y++) {
+                        for (let x = 0; x < engine.width; x++) {
+                            const state = engine.getCell(x, y);
+                            this.drawCell(x, y, state);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error al renderizar:', error);
+                }
+            }
+
+            drawCell(x, y, state) {
+                this.ctx.fillStyle = this.colors[state] || this.colors[STATES.EMPTY];
+                this.ctx.fillRect(
+                    x * this.cellSize, 
+                    y * this.cellSize, 
+                    this.cellSize, 
+                    this.cellSize
+                );
+            }
+        }
+
+        // Función para inicializar el demo
+        function initializeDemo() {
+            try {
+                const canvas = document.getElementById(canvasId);
+                if (!canvas) return;
+
+                // Configuración del demo
+                const CELL_SIZE = 8;
+                const GRID_WIDTH = Math.floor(canvas.width / CELL_SIZE);
+                const GRID_HEIGHT = Math.floor(canvas.height / CELL_SIZE);
+                
+                // Crear engine y renderer específicos para este demo
+                const engine = new WireworldEngine(GRID_WIDTH, GRID_HEIGHT);
+                const renderer = new GridRenderer(canvas, CELL_SIZE);
+                
+                let isRunning = false;
+                let animationInterval = null;
+                
+                // Elementos de control específicos de este demo
+                const startBtn = document.querySelector(`[data-canvas="${canvasId}"].start-btn`);
+                const resetBtn = document.querySelector(`[data-canvas="${canvasId}"].reset-btn`);
+                const generationSpan = canvas.closest('.demo-container')?.querySelector('.demo-generation');
+                const statusSpan = canvas.closest('.demo-container')?.querySelector('.demo-status');
+                
+                // Función para cargar el patrón inicial
+                function loadPattern() {
+                    engine.clear();
+                    
+                    // Calcular posición central para el patrón
+                    const startX = Math.floor((GRID_WIDTH - pattern[0].length) / 2);
+                    const startY = Math.floor((GRID_HEIGHT - pattern.length) / 2);
+                    
+                    // Cargar el patrón
+                    for (let y = 0; y < pattern.length; y++) {
+                        for (let x = 0; x < pattern[y].length; x++) {
+                            const state = pattern[y][x];
+                            if (state !== 0) {
+                                engine.setCell(startX + x, startY + y, state);
+                            }
+                        }
+                    }
+                    
+                    renderer.render(engine);
+                    updateDisplay();
+                }
+                
+                // Función para iniciar/pausar la simulación
+                function toggleSimulation() {
+                    if (isRunning) {
+                        stopSimulation();
+                    } else {
+                        startSimulation();
+                    }
+                }
+                
+                function startSimulation() {
+                    isRunning = true;
+                    if (startBtn) startBtn.innerHTML = '<span>⏸️</span><span>Pausar</span>';
+                    if (statusSpan) statusSpan.textContent = 'Estado: Ejecutando';
+                    
+                    animationInterval = setInterval(() => {
+                        engine.step();
+                        renderer.render(engine);
+                        updateDisplay();
+                    }, 250); // 250ms entre pasos
+                }
+                
+                function stopSimulation() {
+                    isRunning = false;
+                    if (startBtn) startBtn.innerHTML = '<span>▶️</span><span>Iniciar</span>';
+                    if (statusSpan) statusSpan.textContent = 'Estado: Detenido';
+                    
+                    if (animationInterval) {
+                        clearInterval(animationInterval);
+                        animationInterval = null;
+                    }
+                }
+                
+                function resetDemo() {
+                    stopSimulation();
+                    loadPattern();
+                }
+                
+                function updateDisplay() {
+                    if (generationSpan) {
+                        generationSpan.textContent = `Generación: ${engine.generation}`;
+                    }
+                }
+                
+                // Event listeners
+                if (startBtn) startBtn.addEventListener('click', toggleSimulation);
+                if (resetBtn) resetBtn.addEventListener('click', resetDemo);
+                
+                // Cargar patrón inicial
+                loadPattern();
+                
+            } catch (error) {
+                console.error(`Error al inicializar demo ${canvasId}:`, error);
+            }
+        }
+        
+        // Inicializar el demo
+        initializeDemo();
+    });
+</script>
+
+<style>
+    .demo-container {
+        background: white;
+        border: 2px solid #82BCAE;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 20px 0;
+        box-shadow: 0 2px 4px rgba(82, 71, 77, 0.1);
+    }
+    
+    .demo-header h4 {
+        margin: 0 0 10px 0;
+        color: #52474D;
+        font-size: 1.2em;
+    }
+    
+    .demo-header p {
+        margin: 0 0 15px 0;
+        color: #666;
+        font-size: 0.9em;
+        line-height: 1.4;
+    }
+    
+    .demo-canvas-container {
+        display: flex;
+        gap: 15px;
+        align-items: flex-start;
+        margin-bottom: 15px;
+    }
+    
+    .demo-canvas {
+        border: 2px solid #82BCAE;
+        border-radius: 8px;
+        background-color: #000000;
+        cursor: default;
+    }
+    
+    .demo-canvas:hover {
+        border-color: #F26665;
+    }
+    
+    .demo-controls {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        min-width: 100px;
+    }
+    
+    .demo-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border: 2px solid #EDE6B8;
+        background: white;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 0.85em;
+        justify-content: center;
+    }
+    
+    .demo-btn:hover {
+        border-color: #82BCAE;
+        background-color: rgba(130, 188, 174, 0.1);
+    }
+    
+    .start-btn {
+        background-color: #82BCAE;
+        color: white;
+        border-color: #82BCAE;
+    }
+    
+    .start-btn:hover {
+        background-color: #6fa89b;
+    }
+    
+    .reset-btn {
+        background-color: #F26665;
+        color: white;
+        border-color: #F26665;
+    }
+    
+    .reset-btn:hover {
+        background-color: #e55555;
+    }
+    
+    .demo-info {
+        display: flex;
+        gap: 20px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.85em;
+        color: #52474D;
+        justify-content: center;
+    }
+    
+    .demo-info span {
+        padding: 5px 10px;
+        background-color: rgba(130, 188, 174, 0.1);
+        border-radius: 4px;
+        border: 1px solid #82BCAE;
+    }
+    
+    /* Responsive */
+    @media (max-width: 600px) {
+        .demo-canvas-container {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .demo-controls {
+            flex-direction: row;
+            justify-content: center;
+            min-width: auto;
+        }
+        
+        .demo-canvas {
+            max-width: 100%;
+            height: auto;
+        }
+    }
+</style>

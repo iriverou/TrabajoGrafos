@@ -1,47 +1,109 @@
-# Astro Starter Kit: Minimal
+# Simulador de Wireworld - Autómatas Celulares
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Un simulador interactivo de **Wireworld** desarrollado con Astro, que permite explorar y experimentar con autómatas celulares y circuitos digitales.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
+## 🎯 ¿Qué es Wireworld?
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Wireworld es un autómata celular propuesto por Brian Silverman en 1987, particularmente adecuado para simular transistores y circuitos digitales. Es Turing-completo, lo que significa que puede simular cualquier computadora digital.
 
-## 🚀 Project Structure
+### Estados de las Celdas
 
-Inside of your Astro project, you'll see the following folders and files:
+- **🔲 Espacio Vacío** (Negro): Las celdas vacías permanecen vacías
+- **🟡 Conductor** (Amarillo): Actúa como cable por donde fluyen los electrones  
+- **🔵 Cabeza de Electrón** (Azul): Es la señal eléctrica activa moviéndose
+- **🔴 Cola de Electrón** (Rojo): Es el rastro que deja la cabeza del electrón
+
+## 🚀 Características
+
+- ✅ Simulación completa de las reglas de Wireworld
+- ✅ Interfaz interactiva para dibujar circuitos
+- ✅ Controles de simulación (Play/Pause/Step/Reset)
+- ✅ Velocidad de simulación ajustable
+- ✅ Diferentes tamaños de pincel (1x1, 3x3, 5x5)
+- ✅ Diseño responsivo
+- ✅ Información educativa sobre autómatas celulares
+
+## 🛠️ Tecnologías Utilizadas
+
+- **Astro** - Framework web estático
+- **JavaScript/TypeScript** - Lógica de simulación
+- **HTML5 Canvas** - Renderizado gráfico
+- **CSS3** - Estilos y diseño responsivo
+
+## 📋 Estructura del Proyecto
 
 ```text
 /
 ├── public/
+│   └── favicon.svg
 ├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   ├── components/
+│   │   ├── controlpanel.astro
+│   │   ├── layout.astro
+│   │   ├── toolbar.astro
+│   │   └── wireworldgrid.astro
+│   ├── pages/
+│   │   ├── circuitos-demos.astro
+│   │   ├── index.astro
+│   │   └── que-es-wireworld.astro
+│   ├── scripts/
+│   │   ├── app-manager.js
+│   │   ├── grid-render.js
+│   │   ├── user-interactions.js
+│   │   └── wireworld-engine.js
+│   └── types/
+│       └── wireworld.ts
+├── astro.config.mjs
+├── package.json
+└── tsconfig.json
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 🧞 Comandos
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Todos los comandos se ejecutan desde la raíz del proyecto:
 
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
+| Comando                   | Acción                                           |
 | :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+| `npm install`             | Instalar dependencias                            |
+| `npm run dev`             | Iniciar servidor de desarrollo en `localhost:4321` |
+| `npm run build`           | Construir sitio de producción en `./dist/`       |
+| `npm run preview`         | Vista previa local antes del despliegue          |
+| `npm run astro ...`       | Ejecutar comandos CLI de Astro                   |
+| `npm run astro -- --help` | Obtener ayuda usando el CLI de Astro            |
 
-## 👀 Want to learn more?
+## 🎮 Cómo Usar el Simulador
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+1. **Selecciona un estado** en el panel izquierdo (Conductor, Cabeza, etc.)
+2. **Haz clic en la cuadrícula negra** para dibujar
+3. **Presiona Play** en el panel derecho para ver la simulación
+4. **Experimenta** con diferentes patrones
+
+### Controles Disponibles
+
+- **Estados**: Vacío, Conductor, Cabeza de Electrón, Cola de Electrón
+- **Herramientas**: Pincel para dibujar
+- **Tamaños**: 1x1, 3x3, 5x5 píxeles
+- **Simulación**: Play/Pause, Paso a paso, Reset
+- **Velocidad**: Ajustable de 1x a 10x
+
+## � Calidad del Código
+
+Este proyecto incluye las siguientes mejoras de calidad:
+
+- ✅ **Validación de entradas** y manejo de errores robusto
+- ✅ **Gestión centralizada de estado** con `WireworldAppManager`
+- ✅ **Tipos TypeScript** definidos para mejor mantenibilidad
+- ✅ **Logging de errores** comprehensivo para debugging
+- ✅ **Código limpio** sin comentarios obsoletos
+
+## 📚 Información Académica
+
+**Proyecto**: Exploración de Autómatas Celulares: Teoría, Aplicaciones y Desarrollo de un Modelo Interactivo  
+**Universidad**: Universidad Tecnología Metropolitana  
+**Fecha**: Julio 2025
+
+## 👀 ¿Quieres aprender más?
+
+- [Documentación de Astro](https://docs.astro.build)
+- [Wireworld en Wikipedia](https://en.wikipedia.org/wiki/Wireworld)
+- [Autómatas Celulares](https://es.wikipedia.org/wiki/Aut%C3%B3mata_celular)

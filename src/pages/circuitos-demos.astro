@@ -1,93 +1,161 @@
 ---
 import Layout from '../components/layout.astro';
+import CircuitDemo from '../components/circuitdemo.astro';
+import { CIRCUIT_PATTERNS, CIRCUIT_INFO } from '../scripts/circuit-patterns.js';
 ---
 
 <Layout title="Circuitos y Demos - Wireworld">
     <h2>Circuitos y Componentes de Wireworld</h2>
     
-    <p>Esta sección contiene una colección de circuitos y componentes básicos que pueden construirse en Wireworld, desde elementos simples hasta sistemas más complejos.</p>
+    <p>Esta sección contiene simuladores interactivos de circuitos y componentes básicos que pueden construirse en Wireworld. Cada demo incluye controles para iniciar, pausar y reiniciar la simulación.</p>
+
+    <div class="instructions">
+        <h3>Cómo usar las demos:</h3>
+        <ol>
+            <li><strong>Haz clic en "Iniciar"</strong> para comenzar la simulación</li>
+            <li><strong>Observa</strong> cómo fluyen los electrones por los circuitos</li>
+            <li><strong>Usa "Reiniciar"</strong> para volver al estado inicial</li>
+            <li><strong>Experimenta</strong> pausando y reanudando las simulaciones</li>
+        </ol>
+    </div>
 
     <div class="circuits-container">
         <h3>Componentes Básicos</h3>
         
-        <div class="circuit-card">
-            <h4>Diodo</h4>
-            <p>Permite el flujo de electrones en una sola dirección. Es el componente más simple de Wireworld.</p>
-        </div>
+        <CircuitDemo 
+            title={CIRCUIT_INFO.ELECTRON_WIRE.title}
+            description={CIRCUIT_INFO.ELECTRON_WIRE.description}
+            pattern={CIRCUIT_PATTERNS.ELECTRON_WIRE}
+            width={480}
+            height={120}
+        />
 
-        <div class="circuit-card">
-            <h4>Generador de Clock</h4>
-            <p>Produce pulsos regulares de electrones. Fundamental para sincronizar circuitos digitales.</p>
-        </div>
+        <CircuitDemo 
+            title={CIRCUIT_INFO.DIODE.title}
+            description={CIRCUIT_INFO.DIODE.description}
+            pattern={CIRCUIT_PATTERNS.DIODE}
+            width={352}
+            height={160}
+        />
 
-        <div class="circuit-card">
-            <h4>Compuerta AND</h4>
-            <p>Produce salida solo cuando ambas entradas están activas simultaneamente.</p>
-        </div>
+        <CircuitDemo 
+            title={CIRCUIT_INFO.CLOCK_GENERATOR.title}
+            description={CIRCUIT_INFO.CLOCK_GENERATOR.description}
+            pattern={CIRCUIT_PATTERNS.CLOCK_GENERATOR}
+            width={480}
+            height={308}
+        />
+    </div>
 
-        <div class="circuit-card">
-            <h4>Compuerta OR</h4>
-            <p>Produce salida cuando al menos una de las entradas está activa.</p>
-        </div>
+    <div class="logic-gates-section">
+        <h3>Compuertas Lógicas</h3>
+        
+        <CircuitDemo 
+            title={CIRCUIT_INFO.AND_GATE.title}
+            description={CIRCUIT_INFO.AND_GATE.description}
+            pattern={CIRCUIT_PATTERNS.AND_GATE}
+            width={480}
+            height={256}
+        />
 
-        <div class="circuit-card">
-            <h4>Compuerta NOT</h4>
-            <p>Invierte la señal de entrada. Esencial para lógica digital completa.</p>
-        </div>
+        <CircuitDemo 
+            title={CIRCUIT_INFO.OR_GATE.title}
+            description={CIRCUIT_INFO.OR_GATE.description}
+            pattern={CIRCUIT_PATTERNS.OR_GATE}
+            width={480}
+            height={256}
+        />
 
-        <div class="circuit-card">
-            <h4>Compuerta XOR</h4>
-            <p>Produce salida cuando exactamente una entrada está activa.</p>
-        </div>
+        <CircuitDemo 
+            title={CIRCUIT_INFO.NOT_GATE.title}
+            description={CIRCUIT_INFO.NOT_GATE.description}
+            pattern={CIRCUIT_PATTERNS.NOT_GATE}
+            width={416}
+            height={192}
+        />
+
+        <CircuitDemo 
+            title={CIRCUIT_INFO.XOR_GATE.title}
+            description={CIRCUIT_INFO.XOR_GATE.description}
+            pattern={CIRCUIT_PATTERNS.XOR_GATE}
+            width={608}
+            height={256}
+        />
     </div>
 
     <div class="advanced-section">
         <h3>Circuitos Avanzados</h3>
         
-        <div class="circuit-card">
-            <h4>Display de 7 Segmentos</h4>
-            <p>Sistema completo para mostrar dígitos usando segmentos controlados individualmente.</p>
-        </div>
+        <CircuitDemo 
+            title={CIRCUIT_INFO.CROSSOVER.title}
+            description={CIRCUIT_INFO.CROSSOVER.description}
+            pattern={CIRCUIT_PATTERNS.CROSSOVER}
+            width={288}
+            height={224}
+        />
 
-        <div class="circuit-card">
-            <h4>Contador Binario</h4>
-            <p>Circuito secuencial que cuenta pulsos de clock en formato binario.</p>
-        </div>
+        <CircuitDemo 
+            title={CIRCUIT_INFO.FLIP_FLOP.title}
+            description={CIRCUIT_INFO.FLIP_FLOP.description}
+            pattern={CIRCUIT_PATTERNS.FLIP_FLOP}
+            width={544}
+            height={352}
+        />
 
-        <div class="circuit-card">
-            <h4>Flip-Flop</h4>
-            <p>Elemento de memoria básico que puede almacenar un bit de información.</p>
-        </div>
+        <CircuitDemo 
+            title={CIRCUIT_INFO.BUFFER.title}
+            description={CIRCUIT_INFO.BUFFER.description}
+            pattern={CIRCUIT_PATTERNS.BUFFER}
+            width={352}
+            height={120}
+        />
     </div>
 
-    <div class="demo-note">
-        <h4>Próximamente</h4>
-        <p>Los simuladores interactivos para cada circuito estarán disponibles en la siguiente fase del proyecto.</p>
+    <div class="info-note">
+        <h4>💡 Información Importante</h4>
+        <p><strong>Estados de las celdas:</strong></p>
+        <ul>
+            <li><span class="color-sample empty"></span> <strong>Negro:</strong> Espacio vacío</li>
+            <li><span class="color-sample conductor"></span> <strong>Amarillo:</strong> Conductor (cable)</li>
+            <li><span class="color-sample electron-head"></span> <strong>Azul:</strong> Cabeza de electrón (señal activa)</li>
+            <li><span class="color-sample electron-tail"></span> <strong>Rojo:</strong> Cola de electrón (rastro)</li>
+        </ul>
     </div>
 </Layout>
 
 <style>
+    .instructions {
+        background-color: rgba(130, 188, 174, 0.1);
+        padding: 20px;
+        border-radius: 8px;
+        border-left: 4px solid #82BCAE;
+        margin: 20px 0 30px 0;
+    }
+    
+    .instructions ol {
+        margin: 10px 0 0 20px;
+    }
+    
+    .instructions li {
+        margin: 8px 0;
+        line-height: 1.5;
+    }
+
     .circuits-container {
         margin: 30px 0;
     }
 
-    .circuit-card {
-        background-color: #f8f9fa;
+    .logic-gates-section {
+        margin: 40px 0;
         padding: 20px;
-        margin: 15px 0;
+        background-color: rgba(33, 150, 243, 0.05);
         border-radius: 8px;
-        border-left: 4px solid #2196F3;
+        border: 1px solid rgba(33, 150, 243, 0.2);
     }
 
-    .circuit-card h4 {
-        margin: 0 0 10px 0;
-        color: #333;
-    }
-
-    .circuit-card p {
-        margin: 0;
-        color: #666;
-        line-height: 1.5;
+    .logic-gates-section h3 {
+        margin-top: 0;
+        color: #1976D2;
     }
 
     .advanced-section {
@@ -103,15 +171,42 @@ import Layout from '../components/layout.astro';
         color: #856404;
     }
 
-    .demo-note {
+    .info-note {
         background-color: #e8f4fd;
         padding: 20px;
         border-radius: 8px;
         border-left: 4px solid #2196F3;
         margin-top: 30px;
-        text-align: center;
     }
 
-    .demo-note h4 {
-        margin: 0 0 10px 0;
+    .info-note h4 {
+        margin: 0 0 15px 0;
         color: #1976D2;
+    }
+
+    .info-note ul {
+        margin: 10px 0;
+        padding-left: 20px;
+    }
+
+    .info-note li {
+        margin: 8px 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .color-sample {
+        width: 20px;
+        height: 20px;
+        border-radius: 3px;
+        border: 2px solid #333;
+        display: inline-block;
+        flex-shrink: 0;
+    }
+
+    .color-sample.empty { background-color: #000000; }
+    .color-sample.conductor { background-color: #FFD700; }
+    .color-sample.electron-head { background-color: #00FFFF; }
+    .color-sample.electron-tail { background-color: #FF00FF; }
+</style>

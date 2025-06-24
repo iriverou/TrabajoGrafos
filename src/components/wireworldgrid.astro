@@ -18,21 +18,7 @@
 </div>
 
 <script>
-    import { WireworldEngine } from '../scripts/wireworld-engine.js';
-    import { GridRenderer } from '../scripts/grid-render.js';
-    import { UserInteractionHandler } from '../scripts/user-interactions.js';
-
-    // Declarar tipos globales
-    declare global {
-        interface Window {
-            wireworldApp: {
-                engine: any;
-                renderer: any;
-                interactionHandler: any;
-                generationCounter: HTMLElement;
-            };
-        }
-    }
+    import { wireworldAppManager } from '../scripts/app-manager.js';
 
     // Inicializar cuando el DOM esté listo
     document.addEventListener('DOMContentLoaded', () => {
@@ -45,39 +31,44 @@
             return;
         }
         
-        // Configuración inicial
-        const GRID_WIDTH = 70; 
-        const GRID_HEIGHT = 50;
-        const CELL_SIZE = 10;
-        
-        // Inicializar clases
-        const engine = new WireworldEngine(GRID_WIDTH, GRID_HEIGHT);
-        const renderer = new GridRenderer(canvas, CELL_SIZE);
-        const interactionHandler = new UserInteractionHandler(canvas, engine, renderer);
-        
-        // Renderizado inicial
-        renderer.render(engine);
-        
-        // Hacer disponibles globalmente para otros componentes
-        (window as any).wireworldApp = {
-            engine,
-            renderer,
-            interactionHandler,
-            generationCounter
-        };
-        
-        // Actualizar contador de mouse
-        canvas.addEventListener('mousemove', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left;
-            const mouseY = e.clientY - rect.top;
-            const coords = renderer.getGridCoordinates(mouseX, mouseY);
+        try {
+            // Configuración inicial
+            const GRID_WIDTH = 70; 
+            const GRID_HEIGHT = 50;
+            const CELL_SIZE = 10;
             
-            const mouseCoordsElement = document.getElementById('mouse-coords');
-            if (mouseCoordsElement) {
-                mouseCoordsElement.textContent = `Posición: (${coords.x}, ${coords.y})`;
-            }
-        });
+            // Inicializar la aplicación usando el gestor centralizado
+            const app = wireworldAppManager.initialize(
+                canvas, 
+                generationCounter, 
+                GRID_WIDTH, 
+                GRID_HEIGHT, 
+                CELL_SIZE
+            );
+            
+            // Hacer disponible globalmente para compatibilidad
+            (window as any).wireworldApp = app;
+            
+            // Actualizar contador de mouse
+            canvas.addEventListener('mousemove', (e) => {
+                try {
+                    const rect = canvas.getBoundingClientRect();
+                    const mouseX = e.clientX - rect.left;
+                    const mouseY = e.clientY - rect.top;
+                    const coords = app.renderer.getGridCoordinates(mouseX, mouseY);
+                    
+                    const mouseCoordsElement = document.getElementById('mouse-coords') as HTMLElement;
+                    if (mouseCoordsElement) {
+                        mouseCoordsElement.textContent = `Posición: (${coords.x}, ${coords.y})`;
+                    }
+                } catch (error) {
+                    console.error('Error al actualizar coordenadas del mouse:', error);
+                }
+            });
+            
+        } catch (error) {
+            console.error('Error crítico al inicializar la aplicación:', error);
+        }
     });
 </script>
 
