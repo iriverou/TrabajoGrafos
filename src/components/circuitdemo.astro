@@ -27,11 +27,11 @@ const canvasId = `demo-canvas-${title.toLowerCase().replace(/\s+/g, '-')}`;
         </canvas>
         
         <div class="demo-controls">
-            <button class="demo-btn start-btn" data-canvas={canvasId}>
+            <button class="btn start-btn" data-canvas={canvasId}>
                 <span>▶️</span>
                 <span>Iniciar</span>
             </button>
-            <button class="demo-btn reset-btn" data-canvas={canvasId}>
+            <button class="btn btn-danger reset-btn" data-canvas={canvasId}>
                 <span>🔄</span>
                 <span>Reiniciar</span>
             </button>
@@ -147,10 +147,10 @@ const canvasId = `demo-canvas-${title.toLowerCase().replace(/\s+/g, '-')}`;
                 this.ctx = canvas.getContext('2d');
                 this.cellSize = cellSize;
                 this.colors = {
-                    [STATES.EMPTY]: '#000000',
-                    [STATES.CONDUCTOR]: '#FFD700',
-                    [STATES.ELECTRON_HEAD]: '#00FFFF',
-                    [STATES.ELECTRON_TAIL]: '#FF00FF'
+                    [STATES.EMPTY]: getComputedStyle(document.documentElement).getPropertyValue('--color-bg-empty').trim() || '#000000',
+                    [STATES.CONDUCTOR]: getComputedStyle(document.documentElement).getPropertyValue('--color-conductor').trim() || '#FFD700',
+                    [STATES.ELECTRON_HEAD]: getComputedStyle(document.documentElement).getPropertyValue('--color-electron-head').trim() || '#00FFFF',
+                    [STATES.ELECTRON_TAIL]: getComputedStyle(document.documentElement).getPropertyValue('--color-electron-tail').trim() || '#FF00FF'
                 };
             }
 
@@ -287,24 +287,40 @@ const canvasId = `demo-canvas-${title.toLowerCase().replace(/\s+/g, '-')}`;
 </script>
 
 <style>
+    :root {
+        --color-bg-panel: #ffffff; /* Fondo del panel */
+        --color-accent: #82BCAE; /* Color de acento (bordes, botones) */
+        --color-shadow-panel: rgba(82, 71, 77, 0.1); /* Sombra del panel */
+        
+        --color-text-title: #52474D; /* Color del título */
+        --color-text-secondary: #666666; /* Color del texto secundario */
+        
+        --color-bg-empty: #000000; /* Fondo de celdas vacías */
+        --color-conductor: #FFD700; /* Color de los conductores */
+        --color-electron-head: #00FFFF; /* Color de la cabeza del electrón */
+        --color-electron-tail: #FF00FF; /* Color de la cola del electrón */
+        
+        --color-info-bg: rgba(130, 188, 174, 0.1); /* Fondo de información */
+    }
+    
     .demo-container {
-        background: white;
-        border: 2px solid #82BCAE;
+        background: var(--color-bg-panel);
+        border: 2px solid var(--color-accent);
         border-radius: 12px;
         padding: 20px;
         margin: 20px 0;
-        box-shadow: 0 2px 4px rgba(82, 71, 77, 0.1);
+        box-shadow: 0 2px 4px var(--color-shadow-panel);
     }
     
     .demo-header h4 {
         margin: 0 0 10px 0;
-        color: #52474D;
+        color: var(--color-text-title);
         font-size: 1.2em;
     }
     
     .demo-header p {
         margin: 0 0 15px 0;
-        color: #666;
+        color: var(--color-text-secondary);
         font-size: 0.9em;
         line-height: 1.4;
     }
@@ -317,14 +333,14 @@ const canvasId = `demo-canvas-${title.toLowerCase().replace(/\s+/g, '-')}`;
     }
     
     .demo-canvas {
-        border: 2px solid #82BCAE;
+        border: 2px solid var(--color-accent);
         border-radius: 8px;
-        background-color: #000000;
+        background-color: var(--color-bg-empty);
         cursor: default;
     }
     
     .demo-canvas:hover {
-        border-color: #F26665;
+        border-color: var(--color-btn-danger);
     }
     
     .demo-controls {
@@ -334,59 +350,20 @@ const canvasId = `demo-canvas-${title.toLowerCase().replace(/\s+/g, '-')}`;
         min-width: 100px;
     }
     
-    .demo-btn {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 12px;
-        border: 2px solid #EDE6B8;
-        background: white;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: all 0.3s;
-        font-size: 0.85em;
-        justify-content: center;
-    }
-    
-    .demo-btn:hover {
-        border-color: #82BCAE;
-        background-color: rgba(130, 188, 174, 0.1);
-    }
-    
-    .start-btn {
-        background-color: #82BCAE;
-        color: white;
-        border-color: #82BCAE;
-    }
-    
-    .start-btn:hover {
-        background-color: #6fa89b;
-    }
-    
-    .reset-btn {
-        background-color: #F26665;
-        color: white;
-        border-color: #F26665;
-    }
-    
-    .reset-btn:hover {
-        background-color: #e55555;
-    }
-    
     .demo-info {
         display: flex;
         gap: 20px;
         font-family: 'Courier New', monospace;
         font-size: 0.85em;
-        color: #52474D;
+        color: var(--color-text-title);
         justify-content: center;
     }
     
     .demo-info span {
         padding: 5px 10px;
-        background-color: rgba(130, 188, 174, 0.1);
+        background-color: var(--color-info-bg);
         border-radius: 4px;
-        border: 1px solid #82BCAE;
+        border: 1px solid var(--color-accent);
     }
     
     /* Responsive */

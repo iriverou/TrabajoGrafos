@@ -6,15 +6,15 @@
     <div class="control-section">
         <h4>Simulación</h4>
         <div class="control-buttons">
-            <button class="ctrl-btn play-btn" id="play-pause-btn">
+            <button class="btn play-btn ctrl-btn" id="play-pause-btn">
                 <span id="play-icon">▶️</span>
                 <span>Play</span>
             </button>
-            <button class="ctrl-btn step-btn">
+            <button class="btn btn-secondary step-btn ctrl-btn">
                 <span>⏭️</span>
                 <span>Paso</span>
             </button>
-            <button class="ctrl-btn reset-btn">
+            <button class="btn btn-danger reset-btn ctrl-btn">
                 <span>🔄</span>
                 <span>Reset</span>
             </button>
@@ -216,16 +216,35 @@
 </script>
 
 <style>
+    :root {
+        --color-bg-panel: #ffffff;
+        --color-primary: #457b9d;
+        --color-primary-dark: #2f5369;
+        --color-btn-danger: #f26665;
+        --color-btn-danger-hover: #e55555;
+        --color-bg-light: #e6f1f8;
+        --color-text-title: #52474d;
+        --color-text-main: #333333;
+        --color-accent: #82bcae;
+        --color-info-bg: #e6f1f8;
+        --color-shadow-panel: #52474d1a;
+        --color-step-border: #ede6b8;
+        --color-step-hover: #fffbe6;
+        --color-slider-bg: #ede6b8;
+        --color-slider-thumb: #82bcae;
+        --color-btn-text: #ffffff;
+    }
+
     .toolbar, .control-panel {
-        background: white;
-        border: 2px solid #82BCAE;
+        background: var(--color-bg-panel);
+        border: 2px solid var(--color-primary);
         border-radius: 12px;
-        padding: 15px; /* Era 20px, ahora 15px */
+        padding: 15px;
         display: flex;
         flex-direction: column;
-        gap: 15px; /* Era 20px, ahora 15px */
-        min-width: 0; /* Importante: permite que se comprima */
-        box-shadow: 0 2px 4px rgba(82, 71, 77, 0.1);
+        gap: 15px;
+        min-width: 0;
+        box-shadow: 0 2px 4px var(--color-shadow-panel);
     }
 
     .control-section {
@@ -236,10 +255,10 @@
 
     .control-section h4 {
         margin: 0;
-        color: #52474D;
+        color: var(--color-text-title);
         font-size: 0.9em;
         text-transform: uppercase;
-        border-bottom: 1px solid #EDE6B8;
+        border-bottom: 1px solid var(--color-bg-panel);
         padding-bottom: 5px;
     }
 
@@ -254,37 +273,49 @@
         align-items: center;
         gap: 10px;
         padding: 8px 12px;
-        border: 2px solid #EDE6B8;
-        background: white;
+        border: 2px solid var(--color-primary);
+        background: var(--color-bg-panel);
         border-radius: 6px;
         cursor: pointer;
         transition: all 0.3s;
         font-size: 0.85em;
+        color: var(--color-text-title);
     }
 
     .ctrl-btn:hover {
-        border-color: #82BCAE;
-        background-color: rgba(130, 188, 174, 0.1);
+        border-color: var(--color-primary);
+        background-color: var(--color-bg-light);
+        color: var(--color-text-main);
     }
 
     .play-btn {
-        background-color: #82BCAE;
-        color: white;
-        border-color: #82BCAE;
+        background-color: var(--color-primary);
+        color: var(--color-btn-text);
+        border-color: var(--color-primary);
     }
-
     .play-btn:hover {
-        background-color: #6fa89b;
+        background-color: var(--color-primary-dark);
+        color: var(--color-btn-text);
     }
 
     .reset-btn {
-        background-color: #F26665;
-        color: white;
-        border-color: #F26665;
+        background-color: var(--color-btn-danger);
+        color: var(--color-btn-text);
+        border-color: var(--color-btn-danger);
+    }
+    .reset-btn:hover {     
+        background-color: var(--color-btn-danger-hover);
+        color: var(--color-btn-text);
     }
 
-    .reset-btn:hover {     
-        background-color: #e55555;
+    .step-btn {
+        background-color: var(--color-bg-panel);
+        color: var(--color-text-title);
+        border-color: var(--color-step-border);
+    }
+    .step-btn:hover {
+        background-color: var(--color-step-hover);
+        color: var(--color-text-main);
     }
 
     .speed-control {
@@ -297,17 +328,16 @@
         width: 100%;
         height: 6px;
         border-radius: 3px;
-        background: #EDE6B8;
+        background: var(--color-slider-bg);
         outline: none;
         cursor: pointer;
     }
-
     .speed-slider::-webkit-slider-thumb {
         appearance: none;
         width: 18px;
         height: 18px;
         border-radius: 50%;
-        background: #82BCAE;
+        background: var(--color-slider-thumb);
         cursor: pointer;
     }
 
@@ -315,7 +345,7 @@
         display: flex;
         justify-content: space-between;
         font-size: 0.75em;
-        color: #52474D;
+        color: var(--color-text-title);
     }
 
     .info-display {
@@ -328,17 +358,15 @@
         display: flex;
         justify-content: space-between;
         padding: 6px 10px;
-        background-color: rgba(130, 188, 174, 0.1);
+        background-color: var(--color-info-bg);
         border-radius: 4px;
         font-size: 0.85em;
     }
-
     .info-item span:first-child {
-        color: #52474D;
+        color: var(--color-text-title);
     }
-
     .info-item span:last-child {
         font-weight: bold;
-        color: #82BCAE;
+        color: var(--color-accent);
     }
 </style>

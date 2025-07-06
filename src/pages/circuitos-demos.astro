@@ -6,31 +6,20 @@ import { CIRCUIT_PATTERNS, CIRCUIT_INFO } from '../scripts/circuit-patterns.js';
 
 <Layout title="Circuitos Básicos - Wireworld">
     <h2>Circuitos Básicos de Wireworld</h2>
-    
-    <p>Esta sección contiene simuladores interactivos de circuitos y componentes básicos de Wireworld, diseñados para facilitar el aprendizaje progresivo. Comenzamos con los patrones más simples para entender los principios fundamentales.</p>
+    <p>Explora la simulación interactiva del conductor simple en Wireworld. Usa los controles para iniciar, pausar o reiniciar la demo y observa el comportamiento básico de los electrones.</p>
 
     <div class="instructions">
-        <h3>Cómo usar las demos:</h3>
+        <h3>Cómo usar la demo:</h3>
         <ol>
             <li><strong>Haz clic en "Iniciar"</strong> para comenzar la simulación</li>
-            <li><strong>Observa</strong> cómo fluyen los electrones por los circuitos básicos</li>
+            <li><strong>Observa</strong> cómo fluyen los electrones por el conductor</li>
             <li><strong>Usa "Reiniciar"</strong> para volver al estado inicial</li>
-            <li><strong>Experimenta</strong> pausando y reanudando las simulaciones</li>
-            <li><strong>Aprende progresivamente</strong> desde los patrones más simples hasta los más complejos</li>
-        </ol>
-    </div>
-        <h3>Cómo usar las demos:</h3>
-        <ol>
-            <li><strong>Haz clic en "Iniciar"</strong> para comenzar la simulación</li>
-            <li><strong>Observa</strong> cómo fluyen los electrones por los circuitos</li>
-            <li><strong>Usa "Reiniciar"</strong> para volver al estado inicial</li>
-            <li><strong>Experimenta</strong> pausando y reanudando las simulaciones</li>
+            <li><strong>Experimenta</strong> pausando y reanudando la simulación</li>
         </ol>
     </div>
 
-    <div class="circuits-container">
-        <h3>Fundamentos Básicos</h3>
-        
+    <div class="demos-section">
+        <h3>Selección de demos</h3>
         <CircuitDemo 
             title={CIRCUIT_INFO.SIMPLE_WIRE.title}
             description={CIRCUIT_INFO.SIMPLE_WIRE.description}
@@ -38,91 +27,15 @@ import { CIRCUIT_PATTERNS, CIRCUIT_INFO } from '../scripts/circuit-patterns.js';
             width={192}
             height={120}
         />
-
-        <CircuitDemo 
-            title={CIRCUIT_INFO.LINE_SWITCH.title}
-            description={CIRCUIT_INFO.LINE_SWITCH.description}
-            pattern={CIRCUIT_PATTERNS.LINE_SWITCH}
-            width={160}
-            height={120}
-        />
-
-        <CircuitDemo 
-            title={CIRCUIT_INFO.BUFFER_SIMPLE.title}
-            description={CIRCUIT_INFO.BUFFER_SIMPLE.description}
-            pattern={CIRCUIT_PATTERNS.BUFFER_SIMPLE}
-            width={128}
-            height={128}
-        />
-    </div>
-
-    <div class="logic-gates-section">
-        <h3>Elementos de Control</h3>
-
-        <CircuitDemo 
-            title={CIRCUIT_INFO.SIMPLE_JUNCTION.title}
-            description={CIRCUIT_INFO.SIMPLE_JUNCTION.description}
-            pattern={CIRCUIT_PATTERNS.SIMPLE_JUNCTION}
-            width={160}
-            height={160}
-        />
-
-        <CircuitDemo 
-            title={CIRCUIT_INFO.WIRE_WITH_OSCILLATOR.title}
-            description={CIRCUIT_INFO.WIRE_WITH_OSCILLATOR.description}
-            pattern={CIRCUIT_PATTERNS.WIRE_WITH_OSCILLATOR}
-            width={160}
-            height={160}
-        />
-    </div>
-
-    <div class="advanced-section">
-        <h3>Compuertas Lógicas Básicas</h3>
-
-        <CircuitDemo 
-            title={CIRCUIT_INFO.NOT_GATE_SIMPLE.title}
-            description={CIRCUIT_INFO.NOT_GATE_SIMPLE.description}
-            pattern={CIRCUIT_PATTERNS.NOT_GATE_SIMPLE}
-            width={160}
-            height={160}
-        />
-
-        <CircuitDemo 
-            title={CIRCUIT_INFO.AND_GATE_SIMPLE.title}
-            description={CIRCUIT_INFO.AND_GATE_SIMPLE.description}
-            pattern={CIRCUIT_PATTERNS.AND_GATE_SIMPLE}
-            width={160}
-            height={128}
-        />
-
-        <CircuitDemo 
-            title={CIRCUIT_INFO.OR_GATE_SIMPLE.title}
-            description={CIRCUIT_INFO.OR_GATE_SIMPLE.description}
-            pattern={CIRCUIT_PATTERNS.OR_GATE_SIMPLE}
-            width={160}
-            height={128}
-        />
-        />
-    </div>
-
-    <div class="info-note">
-        <h4>💡 Información Importante</h4>
-        <p><strong>Estados de las celdas:</strong></p>
-        <ul>
-            <li><span class="color-sample empty"></span> <strong>Negro:</strong> Espacio vacío</li>
-            <li><span class="color-sample conductor"></span> <strong>Amarillo:</strong> Conductor (cable)</li>
-            <li><span class="color-sample electron-head"></span> <strong>Azul:</strong> Cabeza de electrón (señal activa)</li>
-            <li><span class="color-sample electron-tail"></span> <strong>Rojo:</strong> Cola de electrón (rastro)</li>
-        </ul>
     </div>
 </Layout>
 
 <style>
-    .instructions {
-        background-color: rgba(130, 188, 174, 0.1);
+    :where(.instructions) {
+        background-color: var(--color-info-bg);
         padding: 20px;
         border-radius: 8px;
-        border-left: 4px solid #82BCAE;
+        border-left: 4px solid var(--color-border);
         margin: 20px 0 30px 0;
     }
     
@@ -135,47 +48,25 @@ import { CIRCUIT_PATTERNS, CIRCUIT_INFO } from '../scripts/circuit-patterns.js';
         line-height: 1.5;
     }
 
-    .circuits-container {
+    .demos-section {
         margin: 30px 0;
     }
 
-    .logic-gates-section {
-        margin: 40px 0;
-        padding: 20px;
-        background-color: rgba(33, 150, 243, 0.05);
-        border-radius: 8px;
-        border: 1px solid rgba(33, 150, 243, 0.2);
-    }
-
-    .logic-gates-section h3 {
+    .demos-section h3 {
         margin-top: 0;
-        color: #1976D2;
+        color: var(--color-text); /* Título azul */
     }
-
-    .advanced-section {
-        margin: 40px 0;
-        padding: 20px;
-        background-color: #fff3cd;
-        border-radius: 8px;
-        border: 1px solid #ffeaa7;
-    }
-
-    .advanced-section h3 {
-        margin-top: 0;
-        color: #856404;
-    }
-
     .info-note {
-        background-color: #e8f4fd;
+        background-color: var(--color-info-bg); /* Fondo info-note */
         padding: 20px;
         border-radius: 8px;
-        border-left: 4px solid #2196F3;
+        border-left: 4px solid var(--color-border); /* Borde info-note */
         margin-top: 30px;
     }
 
     .info-note h4 {
         margin: 0 0 15px 0;
-        color: #1976D2;
+        color: var(--color-text-blue); /* Título azul */
     }
 
     .info-note ul {
@@ -194,13 +85,13 @@ import { CIRCUIT_PATTERNS, CIRCUIT_INFO } from '../scripts/circuit-patterns.js';
         width: 20px;
         height: 20px;
         border-radius: 3px;
-        border: 2px solid #333;
+        border: 2px solid var(--color-main-border); /* Borde muestra color */
         display: inline-block;
         flex-shrink: 0;
     }
 
-    .color-sample.empty { background-color: #000000; }
-    .color-sample.conductor { background-color: #FFD700; }
-    .color-sample.electron-head { background-color: #00FFFF; }
-    .color-sample.electron-tail { background-color: #FF00FF; }
+    .color-sample.empty { background-color: var(--color-empty); /* Estado vacío (Wireworld) */ }
+    .color-sample.conductor { background-color: var(--color-conductor); /* Estado conductor (Wireworld) */ }
+    .color-sample.electron-head { background-color: var(--color-electron-head); /* Estado electron-head (Wireworld) */ }
+    .color-sample.electron-tail { background-color: var(--color-electron-tail); /* Estado electron-tail (Wireworld, rojo consistente) */ }
 </style>
